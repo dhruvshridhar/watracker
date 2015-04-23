@@ -1,7 +1,8 @@
 #!/usr/bin/php
 <?php
 date_default_timezone_set('Europe/Madrid');
-require 'src/php/whatsprot.class.php';
+require 'src/whatsprot.class.php';
+require 'src/events/MyEvents.php';
 
 function fgets_u($pStdn)
 {
@@ -25,7 +26,7 @@ function onGetRequestLastSeen($username, $from, $msgid, $seconds)
 	//echo "Received last seen seconds: '$seconds'";
     //$now = time();
     //$lastSeen = $now - $seconds;
-   
+
     $secondsInAMinute = 60;
     $secondsInAnHour  = 60 * $secondsInAMinute;
     $secondsInADay    = 24 * $secondsInAnHour;
@@ -50,10 +51,10 @@ function onGetRequestLastSeen($username, $from, $msgid, $seconds)
     	echo "Now online";
     else
     	echo "- Last seen: " . $days . " days " . $hours . " hours " . $minutes . " minutes ago\n";
-    	
+
     	global $ls;
     	$ls = "- Last seen: " . $days . " days " . $hours . " hours " . $minutes . " minutes ago\n";
-  
+
 }
 
 $presence;
@@ -76,11 +77,11 @@ function secondsToTime($seconds) {
 }
 
 
-$nickname = "WhatsApp Tracker";
+//////////////////////////////////////////////////
 // #### DO NOT ADD YOUR INFO AND THEN COMMIT THIS FILE! ####
-$sender = 	""; // Number of the bot with country code
-$imei = 	""; // Not used
-$password =     ""; // Password you received from WhatsApp
+$sender   = 	""; // Number of the bot with country code
+$password =   ""; // Password you received from WhatsApp
+//////////////////////////////////////////////////
 
 if ($argc < 2) {
 	echo "====================================================\n";
@@ -95,11 +96,12 @@ $dst=$_SERVER['argv'][2];
 echo "====================================================\n";
 echo "               WhatsApp tracker v0.1                \n";
 echo "====================================================\n\n";
-echo "[*] Logging in as '$nickname' ($sender)\n";
-$wa = new WhatsProt($sender, $imei, $nickname, FALSE);
+echo "[*] Logging in as WhatsApp Tracker ($sender)\n";
+$wa = new WhatsProt($sender, 'WhatsApp Tracker', FALSE);
 
 $wa->connect();
 $wa->loginWithPassword($password);
+$events = new MyEvents($wa);
 $wa->eventManager()->bind('onGetRequestLastSeen', 'onGetRequestLastSeen');
 $wa->eventManager()->bind("onPresence", "onPresenceReceived");
 
@@ -122,30 +124,30 @@ if (($_SERVER['argv'][1] == "-cRemote0") || ($_SERVER['argv'][1] == "-check")) {
 if (($_SERVER['argv'][1] == "-cHidden") ||($_SERVER['argv'][1] == "-cRemote1")) {
 	echo "\n[-] Tracker mode (ON): Waiting the user to get online...\n";
 	$wa->SendPresenceSubscription($dst);
-	$wa->PollMessages();
-	
+	$wa->pollMessage();
+
 	if($presence == "available")
 		echo "- The user is now online\n\n";
 	else
 		echo "- The user is offline\n\n";
-		
+
 	while(true){
-		$wa->PollMessages();
+		$wa->pollMessage();
 		if(($lastpresence == "available") && ($presence == "unavailable")){
-	
-			$timeOffline = date("Y-m-d H:i:s");	
+
+			$timeOffline = date("Y-m-d H:i:s");
 			while($presence == "unavailable"){
 				$timeDiff = round(strtotime(date("Y-m-d H:i:s")) - strtotime($timeOffline));
 				echo secondsToTime($timeDiff)."\n";
 				if($_SERVER['argv'][1] == "-cRemote1")
 					$wa->sendMessage($dst, "(".$_SERVER['argv'][3].") ".secondsToTime($timeDiff));
-				$wa->PollMessages();
+				$wa->pollMessage();
 				sleep(5);
 			}
-	
+
 		}
 	$lastpresence = $presence;
 	sleep(5);
 	}
-	
+
 }

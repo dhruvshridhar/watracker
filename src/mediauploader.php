@@ -1,5 +1,4 @@
 <?php
-
 /**
  * Media uploader class
  */
@@ -13,9 +12,9 @@ class WhatsMediaUploader
         fwrite($sock, $HEAD);
 
         //write file data
-        $buf = 1024;
+        $buf       = 1024;
         $totalread = 0;
-        $fp = fopen($filepath, "r");
+        $fp        = fopen($filepath, "r");
         while ($totalread < $mediafile['filesize']) {
             $buff = fread($fp, $buf);
             fwrite($sock, $buff, $buf);
@@ -37,7 +36,7 @@ class WhatsMediaUploader
         list($header, $body) = preg_split("/\R\R/", $data, 2);
 
         $json = json_decode($body);
-        if (!is_null($json)) {
+        if ( ! is_null($json)) {
             return $json;
         }
         return false;
@@ -46,9 +45,9 @@ class WhatsMediaUploader
     public static function pushFile($uploadResponseNode, $messageContainer, $mediafile, $selfJID)
     {
         //get vars
-        $url = $uploadResponseNode->getChild("media")->getAttribute("url");
+        $url      = $uploadResponseNode->getChild("media")->getAttribute("url");
         $filepath = $messageContainer["filePath"];
-        $to = $messageContainer["to"];
+        $to       = $messageContainer["to"];
         return self::getPostString($filepath, $url, $mediafile, $to, $selfJID);
     }
 
@@ -57,11 +56,10 @@ class WhatsMediaUploader
         $host = parse_url($url, PHP_URL_HOST);
 
         //filename to md5 digest
-        $cryptoname = md5($filepath) . "." . $mediafile['fileextension'];
-        $boundary = "zzXXzzYYzzXXzzQQ";
-        $contentlength = 0;
+        $cryptoname    = md5($filepath) . "." . $mediafile['fileextension'];
+        $boundary      = "zzXXzzYYzzXXzzQQ";
 
-        if(is_array($to)) {
+        if (is_array($to)) {
             $to = implode(',', $to);
         }
 
@@ -77,19 +75,14 @@ class WhatsMediaUploader
 
         $fBAOS = "\r\n--" . $boundary . "--\r\n";
 
-        $contentlength += strlen($hBAOS);
-        $contentlength += strlen($fBAOS);
-        $contentlength += $mediafile['filesize'];
+        $contentlength = strlen($hBAOS) + strlen($fBAOS) + $mediafile['filesize'];
 
         $POST = "POST " . $url . "\r\n";
         $POST .= "Content-Type: multipart/form-data; boundary=" . $boundary . "\r\n";
         $POST .= "Host: " . $host . "\r\n";
-        $POST .= "User-Agent: " . WhatsProt::WHATSAPP_USER_AGENT . "\r\n";
+        $POST .= "User-Agent: " . Constants::WHATSAPP_USER_AGENT . "\r\n";
         $POST .= "Content-Length: " . $contentlength . "\r\n\r\n";
 
         return self::sendData($host, $POST, $hBAOS, $filepath, $mediafile, $fBAOS);
     }
-
 }
-
-?>
