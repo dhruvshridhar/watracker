@@ -59,15 +59,19 @@ function onGetRequestLastSeen($username, $from, $msgid, $seconds)
 
 $presence;
 // We get on $presence a string (online or offline). $type
-function onPresenceReceived($username, $from, $type)
+function onPresenceAvailable($username, $from)
 {
     global $presence;
-    $presence = $type;
-    if($type == "available")
-    	echo "- The user is online\n\n";
-    else
-    	echo "- The user is offline\n\n";
+    $presence = 'available';
+    echo "- The user is online\n\n";
+}
 
+// We get on $presence a string (online or offline). $type
+function onPresenceUnavailable($username, $from, $last)
+{
+    global $presence;
+    $presence = 'unavailable';
+    echo "- The user is offline\n\n";
 }
 
 function secondsToTime($seconds) {
@@ -103,7 +107,8 @@ $wa->connect();
 $wa->loginWithPassword($password);
 $events = new MyEvents($wa);
 $wa->eventManager()->bind('onGetRequestLastSeen', 'onGetRequestLastSeen');
-$wa->eventManager()->bind("onPresence", "onPresenceReceived");
+$wa->eventManager()->bind("onPresenceAvailable", "onPresenceAvailable");
+$wa->eventManager()->bind("onPresenceUnavailable", "onPresenceUnavailable");
 
 
 if (($_SERVER['argv'][1] == "-cRemote0") || ($_SERVER['argv'][1] == "-check")) {
