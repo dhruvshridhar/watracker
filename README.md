@@ -5,6 +5,9 @@ WhatsApp-Tracker
 
 ![WATracker](http://cl.ly/image/1P331F2S3q0b/watracker.png)
 
+
+**This code is OUTDATED**
+
 ----------
 
 ### What is WhatsApp Tracker?
