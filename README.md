@@ -6,9 +6,13 @@ WhatsApp-Tracker
 ![WATracker](http://cl.ly/image/1P331F2S3q0b/watracker.png)
 
 
-**This code is OUTDATED**
-
 ----------
+
+### Donate
+
+**Do you like this project? Support it by donating**
+- ![btc](https://camo.githubusercontent.com/4bc31b03fc4026aa2f14e09c25c09b81e06d5e71/687474703a2f2f7777772e6d6f6e747265616c626974636f696e2e636f6d2f696d672f66617669636f6e2e69636f) Bitcoin: 1BEB8ugaKQxPRTGtgPp92aEtinT3jLVj1A
+- ![pp](https://raw.githubusercontent.com/reek/anti-adblock-killer/gh-pages/images/paypal.png) Paypal: [Donate](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=R9J2UVKUP8X8S)
 
 ### What is WhatsApp Tracker?
 
@@ -27,11 +31,22 @@ More than anything to show that there is no privacy and can automate monitoring 
 
 ### Commands
 
+```
 php watracker.php
+```
 
 A list of commands that the program currently has:
 
-- ***-check < number >*** It shows on screen the last time the user was online every minute. (only works for users who have their last seen visible).
-- ***-cRemote0 < yourNumber > < number >*** It shows on screen and send a message to the mobile you assign the log of the last time the user was online every minute. (only works for users who have their last seen visible).
-- ***-cHidden < number >*** It shows on screen the last time the user was online. (Works for all users, focused to those who has the last seen time hidden).
-- ***-cRemote1 < yourNumber > < number >*** It shows on screen and send a message to the mobile you assign the log of the last time the user was online. (Works for all users, focused to those who has the last seen time hidden).
+- ***< numberToTrack >*** It shows on screen the last time the user was online every minute. 
+- ***< numberToTrack > < yourNumber >*** It shows on screen and send a message to the mobile you assign, the log of the last time the user was online every minute.
+
+Example:
+```
+php watracker.php 34123456789
+```
+
+Or
+
+```
+php watracker.php 34123456789 34987654321
+```
