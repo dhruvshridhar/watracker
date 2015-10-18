@@ -37,6 +37,7 @@ abstract class AllEvents
     }
 
     //Adding to this list? Please put them in alphabetical order!
+    public function onCallReceived($mynumber, $from, $id, $notify, $time, $callId) {}
     public function onClose($mynumber, $error) {}
     public function onCodeRegister($mynumber, $login, $password, $type, $expiration, $kind, $price, $cost, $currency, $price_expiration) {}
     public function onCodeRegisterFailed($mynumber, $status, $reason, $retry_after) {}
@@ -53,7 +54,7 @@ abstract class AllEvents
     public function onDissectPhoneFailed($mynumber) {}
     public function onGetAudio($mynumber, $from, $id, $type, $time, $name, $size, $url, $file, $mimeType, $fileHash, $duration, $acodec, $fromJID_ifGroup = null) {}
     public function onGetBroadcastLists($mynumber, $broadcastLists){}
-    public function onGetError($mynumber, $from, $id, $data) {}
+    public function onGetError($mynumber, $from, $id, $data, $errorType = null) {}
     public function onGetExtendAccount($mynumber, $kind, $status, $creation, $expiration) {}
     public function onGetFeature($mynumber, $from, $encrypt) {}
     public function onGetGroupMessage($mynumber, $from_group_jid, $from_user_jid, $id, $type, $time, $name, $body) {}
@@ -82,6 +83,7 @@ abstract class AllEvents
     public function onGroupsChatCreate($mynumber, $gid) {}
     public function onGroupsChatEnd($mynumber, $gid) {}
     public function onGroupsParticipantsAdd($mynumber, $groupId, $jid) {}
+    public function onGroupsParticipantChangedNumber($mynumber, $groupId, $time, $oldNumber, $notify, $newNumber) {}
     public function onGroupsParticipantsPromote($myNumber, $groupJID, $time, $issuerJID, $issuerName, $promotedJIDs = array()) {}
     public function onGroupsParticipantsRemove($mynumber, $groupId, $jid) {}
     public function onLogin($mynumber) {}
@@ -94,6 +96,9 @@ abstract class AllEvents
     public function onMessagePaused($mynumber, $from, $id, $type, $time) {}
     public function onMessageReceivedClient($mynumber, $from, $id, $type, $time, $participant) {}
     public function onMessageReceivedServer($mynumber, $from, $id, $type, $time) {}
+    public function onNumberWasAdded($mynumber, $jid) {}
+    public function onNumberWasRemoved($mynumber, $jid) {}
+    public function onNumberWasUpdated($mynumber, $jid) {}
     public function onPaidAccount($mynumber, $author, $kind, $status, $creation, $expiration) {}
     public function onPaymentRecieved($mynumber, $kind, $status, $creation, $expiration) {}
     public function onPing($mynumber, $id) {}
@@ -107,4 +112,5 @@ abstract class AllEvents
     public function onSendPresence($mynumber, $type, $name ) {}
     public function onSendStatusUpdate($mynumber, $txt ) {}
     public function onStreamError($data) {}
+    public function onWebSync($mynumber, $from, $id, $syncData, $code, $name) {}
 }
