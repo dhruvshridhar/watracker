@@ -54,3 +54,11 @@ Or
 ```
 php watracker.php 34123456789 34987654321
 ```
+
+### F.A.Q.
+
+- How to obtain WhatsApp password
+
+You can obtain it here: http://www.watools.es/pwd.html
+
+Or using [WART](https://github.com/mgp25/WART)
